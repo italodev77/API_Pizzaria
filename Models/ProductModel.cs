@@ -17,6 +17,13 @@ namespace backendPizzaria.Models
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public int Amount { get; set; }
 
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        public int? category_id { get; set; }
+
+        public CategoryModel? Category { get; set; }
+
+        public ICollection<OrderItemsModel>? Items { get; set; }
+
         public DateTime? Created_at { get; set; } = DateTime.Now;
 
         public DateTime? Updated_at { get; set; } = DateTime.Now;
