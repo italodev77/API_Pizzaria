@@ -140,3 +140,4 @@ C:\pizzaria\backendPizzaria\obj\Debug\net8.0\refint\backendPizzaria.dll
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.pdb
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.genruntimeconfig.cache
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\ref\backendPizzaria.dll
+C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.sourcelink.json
