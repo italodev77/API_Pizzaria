@@ -1,24 +1,37 @@
-# API de Pizzaria
+# API de Gestão de Pizzaria
 
-Esta é uma API desenvolvida para gerenciar um sistema de pizzaria. O projeto é uma aplicação backend, onde implementei diversos conceitos e práticas que venho aprendendo. A API permite a manipulação de produtos e categorias, além de fornecer endpoints para operações CRUD.
-
-## Tecnologias Utilizadas
-
-- **.NET 8**: Framework utilizado para desenvolver a API.
-- **Entity Framework Core**: ORM utilizado para interagir com o banco de dados.
-- **SQL Server**: Banco de dados relacional utilizado para armazenar as informações.
-- **Azure Boards**: Ferramenta utilizada para gerenciar as features do projeto, organizar tarefas e priorizar demandas.
+Este projeto é uma API desenvolvida para a gestão de uma pizzaria, onde estou aplicando todo o conhecimento adquirido em desenvolvimento de software. O foco é implementar as melhores práticas e soluções que vejo no dia a dia, garantindo uma aplicação robusta e escalável.
 
 ## Funcionalidades
 
-- **Gerenciamento de Produtos**: Possui endpoints para criar, ler, atualizar e excluir produtos.
-- **Gerenciamento de Categorias**: Endpoints para manipular categorias de produtos.
-- **Validações**: Implementação de validações nos modelos de dados para garantir a integridade das informações.
+- Cadastro de produtos (pizzas, bebidas, etc.)
+- Gestão de categorias de produtos
+- Gerenciamento de pedidos
+- [Outras funcionalidades que você planeja implementar]
+
+## Tecnologias Utilizadas
+
+- C#
+- ASP.NET Core
+- Entity Framework Core
+- SQL Server com docker
+  
+## Gerenciamento de Features
+
+As features do projeto estão sendo gerenciadas no [Azure Boards](https://azure.microsoft.com/en-us/services/devops/boards/) para organizar melhor a aplicação e as demandas por prioridade. O objetivo é garantir que o desenvolvimento siga uma ordem lógica e que os recursos mais importantes sejam tratados primeiro.
 
 ## Estrutura do Projeto
 
-O projeto está organizado em várias camadas, incluindo:
+- `/Controllers` - Controladores da API
+- `/Models` - Modelos de dados
+- `/DTOs` - Objetos de transferência de dados
+- `/Data` - Persistência e configuração do banco de dados
 
-- **Models**: Contém as classes que representam as entidades do banco de dados.
-- **DTOs**: Objetos de transferência de dados utilizados para validação e manipulação de informações.
-- **Controllers**: Controladores que gerenciam as requisições HTTP e interagem com os serviços da aplicação.
+## Metodologia de Desenvolvimento
+
+Estou utilizando a técnica [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/) para gerenciar o desenvolvimento do projeto. Essa abordagem permite que eu mantenha uma estrutura clara e organizada para o controle de versões.
+
+## Futuras Implementações
+
+- Desenvolvimento de uma aplicação mobile com React Native para consumir esta API.
+- Criação de uma aplicação web para gestão de pedidos e produtos.
