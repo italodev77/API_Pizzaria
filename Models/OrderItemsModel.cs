@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backendPizzaria.Models
 {
+    [Table("orderItems")]
     public class OrderItemsModel
     {
         [Key]
@@ -18,7 +20,7 @@ namespace backendPizzaria.Models
 
         public OrderModel? Order { get; set; }
 
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
 
         public ProductModel? Product { get; set; }
     }

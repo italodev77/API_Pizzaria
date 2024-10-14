@@ -1,4 +1,5 @@
 ﻿using backendPizzaria.Data.Persistence;
+using backendPizzaria.DTOs;
 using backendPizzaria.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,24 +32,56 @@ namespace backendPizzaria.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductModel>> PostProduct(ProductModel produto)
+        public async Task<ActionResult<ProductModel>> PostProduct(ProductDto productDto)
         {
-            _dbContext.Products.Add(produto);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = new ProductModel
+            {
+                Description = productDto.Description,
+                Price = productDto.Price,
+                Amount = productDto.Amount,
+                CategoryId = productDto.CategoryId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProduct), new { id = produto.Id }, produto);
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutProduto(int id, ProductModel produto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutProduto(int id, ProductDto productDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var produto = await _dbContext.Products.FindAsync(id);
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            produto.Description = productDto.Description;
+            produto.Price = productDto.Price;
+            produto.Amount = productDto.Amount;
+            produto.CategoryId = productDto.CategoryId;
+            produto.UpdatedAt = DateTime.Now;
+
             _dbContext.Products.Update(produto);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
-        [HttpDelete("{id: int}")]
+        [HttpDelete("{id:int}")]
 
         public async Task<IActionResult> DeleteProduct(int id)
         {

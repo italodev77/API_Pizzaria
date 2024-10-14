@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backendPizzaria.Models
 {
+    [Table("order")]
     public class OrderModel
     {
         [Key]
@@ -23,6 +25,6 @@ namespace backendPizzaria.Models
         public DateTime? Updated_at { get; set; } = DateTime.Now;
 
         // Propriedade de navegação para Item
-        public ICollection<OrderItemsModel>? Items { get; set; z}
+        public ICollection<OrderItemsModel>? Items { get; set; }
     }
 }
