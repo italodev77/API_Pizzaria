@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backendPizzaria.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("/products")]
     public class ProductController : ControllerBase
     {
         private readonly ApiDbContext _dbContext;
@@ -23,7 +23,7 @@ namespace backendPizzaria.Controllers
             return await _dbContext.Products.ToListAsync();
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("FindProduct/{id}")]
         public async Task<ActionResult<ProductModel>> GetProduct(int id)
         {
             var produto = await _dbContext.Products.FindAsync(id);
