@@ -1,66 +1,108 @@
-﻿using backendPizzaria.Data.Persistence;
+﻿using backendPizzaria.DAL.Product;
+using backendPizzaria.DTOs;
 using backendPizzaria.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("/products")]
     public class ProductController : ControllerBase
     {
-        private readonly ApiDbContext _dbContext;
-        public ProductController(ApiDbContext dbcontext)
+        private readonly ProductDAL _productDAL;
+
+        public ProductController(ProductDAL productDAL)
         {
-            _dbContext = dbcontext;
+            _productDAL = productDAL;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductModel>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
-            return await _dbContext.Products.ToListAsync();
+            var products = await _productDAL.GetAllProducts();
+            var productDtos = products.Select(p => new ProductDto
+            {
+                Description = p.Description,
+                Price = p.Price,
+                Amount = p.Amount,
+                CategoryId = (int)p.CategoryId,
+            }).ToList();
+
+            return Ok(productDtos);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductModel>> GetProduct(int id)
+        [HttpGet("FindProduct/{id}")]
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
-            var produto = await _dbContext.Products.FindAsync(id);
+            var product = await _productDAL.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound("Produto não encontrado.");
+            }
 
-            return Ok(produto);
+            var productDto = new ProductDto
+            {
+                Description = product.Description,
+                Price = product.Price,
+                Amount = product.Amount,
+                CategoryId = (int)product.CategoryId,
+            };
+
+            return Ok(productDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductModel>> PostProduct(ProductModel produto)
+        public async Task<ActionResult> PostProduct(ProductDto productDto)
         {
-            _dbContext.Products.Add(produto);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var product = new ProductModel
+                {
+                    Description = productDto.Description,
+                    Price = productDto.Price,
+                    Amount = productDto.Amount,
+                    CategoryId = productDto.CategoryId
+                };
 
-            return CreatedAtAction(nameof(GetProduct), new { id = produto.Id }, produto);
+                await _productDAL.AddProduct(product);
+                return Ok("Produto criado");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutProduto(int id, ProductModel produto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
         {
-            _dbContext.Products.Update(produto);
-            await _dbContext.SaveChangesAsync();
+            var product = await _productDAL.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound("Produto não encontrado.");
+            }
 
+            product.Description = productDto.Description;
+            product.Price = productDto.Price;
+            product.Amount = productDto.Amount;
+            product.CategoryId = productDto.CategoryId;
+
+            await _productDAL.UpdateProduct(product);
             return NoContent();
         }
 
-        [HttpDelete("{id: int}")]
-
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var produto = await _dbContext.Products.FindAsync(id);
+            var product = await _productDAL.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound("Produto não encontrado.");
+            }
 
-            _dbContext.Products.Remove(produto);
-            await _dbContext.SaveChangesAsync();    
-
+            await _productDAL.DeleteProduct(id);
             return NoContent();
-
         }
-
-
     }
 }
