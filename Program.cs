@@ -1,4 +1,3 @@
-using backendPizzaria.DAL.Product; // Adicione esta linha
 using backendPizzaria.Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,14 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configuração do DbContext
 builder.Services.AddDbContext<ApiDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
-// Registre o ProductDAL como um serviço
-builder.Services.AddScoped<ProductDAL>(); // Adicione esta linha
 
 var app = builder.Build();
 
