@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace backendPizzaria.DTOs
+namespace backendPizzaria.DTOs.Product
 {
     public class ProductDto
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Range(1, int.MaxValue, ErrorMessage = "O preço deve ser maior que zero")]

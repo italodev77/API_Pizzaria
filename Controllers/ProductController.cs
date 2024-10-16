@@ -1,9 +1,8 @@
-﻿using backendPizzaria.Data.Persistence;
-using backendPizzaria.DTOs;
+﻿using backendPizzaria.DAL.Product;
+using backendPizzaria.DTOs.Product;
 using backendPizzaria.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.Controllers
 {
@@ -11,89 +10,99 @@ namespace backendPizzaria.Controllers
     [Route("/products")]
     public class ProductController : ControllerBase
     {
-        private readonly ApiDbContext _dbContext;
-        public ProductController(ApiDbContext dbcontext)
+        private readonly ProductDAL _productDAL;
+
+        public ProductController(ProductDAL productDAL)
         {
-            _dbContext = dbcontext;
+            _productDAL = productDAL;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductModel>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
-            return await _dbContext.Products.ToListAsync();
+            var products = await _productDAL.GetAllProducts();
+            var productDtos = products.Select(p => new ProductDto
+            {
+                Description = p.Description,
+                Price = p.Price,
+                Amount = p.Amount,
+                CategoryId = (int)p.CategoryId,
+            }).ToList();
+
+            return Ok(productDtos);
         }
 
         [HttpGet("FindProduct/{id}")]
-        public async Task<ActionResult<ProductModel>> GetProduct(int id)
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
-            var produto = await _dbContext.Products.FindAsync(id);
+            var product = await _productDAL.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound("Produto não encontrado.");
+            }
 
-            return Ok(produto);
+            var productDto = new ProductDto
+            {
+                Description = product.Description,
+                Price = product.Price,
+                Amount = product.Amount,
+                CategoryId = (int)product.CategoryId,
+            };
+
+            return Ok(productDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductModel>> PostProduct(ProductDto productDto)
+        public async Task<ActionResult> PostProduct(ProductDto productDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                var product = new ProductModel
+                {
+                    Description = productDto.Description,
+                    Price = productDto.Price,
+                    Amount = productDto.Amount,
+                    CategoryId = productDto.CategoryId
+                };
+
+                await _productDAL.AddProduct(product);
+                return Ok("Produto criado");
             }
-
-            var product = new ProductModel
+            catch (Exception ex)
             {
-                Description = productDto.Description,
-                Price = productDto.Price,
-                Amount = productDto.Amount,
-                CategoryId = productDto.CategoryId,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-
-            _dbContext.Products.Add(product);
-            await _dbContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutProduto(int id, ProductDto productDto)
+        public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
         {
-            if (!ModelState.IsValid)
+            var product = await _productDAL.GetProductById(id);
+            if (product == null)
             {
-                return BadRequest(ModelState);
+                return NotFound("Produto não encontrado.");
             }
 
-            var produto = await _dbContext.Products.FindAsync(id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
+            product.Description = productDto.Description;
+            product.Price = productDto.Price;
+            product.Amount = productDto.Amount;
+            product.CategoryId = productDto.CategoryId;
 
-            produto.Description = productDto.Description;
-            produto.Price = productDto.Price;
-            produto.Amount = productDto.Amount;
-            produto.CategoryId = productDto.CategoryId;
-            produto.UpdatedAt = DateTime.Now;
-
-            _dbContext.Products.Update(produto);
-            await _dbContext.SaveChangesAsync();
-
+            await _productDAL.UpdateProduct(product);
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
-
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var produto = await _dbContext.Products.FindAsync(id);
+            var product = await _productDAL.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound("Produto não encontrado.");
+            }
 
-            _dbContext.Products.Remove(produto);
-            await _dbContext.SaveChangesAsync();    
-
+            await _productDAL.DeleteProduct(id);
             return NoContent();
-
         }
-
-
     }
 }
