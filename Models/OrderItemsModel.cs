@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backendPizzaria.Models
 {
+    [Table("OrderItems")]
     public class OrderItemsModel
     {
         [Key]

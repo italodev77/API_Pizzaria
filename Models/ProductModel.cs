@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backendPizzaria.Models
 {
+    [Table("Product")]
     public class ProductModel
     {
+
         [Key]
         public int Id { get; set; }
 

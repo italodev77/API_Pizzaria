@@ -1,4 +1,4 @@
-using backendPizzaria.DAL.Product; 
+using backendPizzaria.DALs.Product;
 using backendPizzaria.Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 

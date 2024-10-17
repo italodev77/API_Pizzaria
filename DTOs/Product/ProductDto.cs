@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace backendPizzaria.DTOs
+namespace backendPizzaria.DTOs.Product
 {
     public class ProductDto
     {

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backendPizzaria.Models
 {
+    [Table("Category")]
     public class CategoryModel
     {
         [Key]

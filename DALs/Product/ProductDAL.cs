@@ -2,7 +2,7 @@
 using backendPizzaria.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace backendPizzaria.DAL.Product
+namespace backendPizzaria.DALs.Product
 {
     public class ProductDAL
     {

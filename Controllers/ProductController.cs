@@ -1,4 +1,4 @@
-﻿using backendPizzaria.DAL.Product;
+﻿using backendPizzaria.DALs.Product;
 using backendPizzaria.DTOs.Product;
 using backendPizzaria.Models;
 using Microsoft.AspNetCore.Http;
