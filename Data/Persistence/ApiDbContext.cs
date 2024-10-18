@@ -1,9 +1,10 @@
 ﻿using backendPizzaria.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.Data.Persistence
 {
-    public class ApiDbContext(DbContextOptions options): DbContext(options)
+    public class ApiDbContext(DbContextOptions options): IdentityDbContext(options)
     {
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<CategoryModel> Category { get; set; }

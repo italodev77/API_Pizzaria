@@ -141,3 +141,8 @@ C:\pizzaria\backendPizzaria\obj\Debug\net8.0\refint\backendPizzaria.dll
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.pdb
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.genruntimeconfig.cache
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\ref\backendPizzaria.dll
+C:\pizzaria\backendPizzaria\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\pizzaria\backendPizzaria\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\pizzaria\backendPizzaria\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\pizzaria\backendPizzaria\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\pizzaria\backendPizzaria\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
