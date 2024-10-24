@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backendPizzaria.Controllers
 {
+    [ApiController]
+    [Route("/orders")]
     public class OrderController: ControllerBase
     {
         private readonly OrderDal _orderDal;
