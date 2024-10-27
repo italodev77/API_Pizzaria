@@ -1,11 +1,13 @@
 ﻿using backendPizzaria.DALs.Product;
 using backendPizzaria.DTOs.Product;
 using backendPizzaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backendPizzaria.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/products")]
     public class ProductController : ControllerBase
@@ -51,7 +53,7 @@ namespace backendPizzaria.Controllers
 
             return Ok(productDto);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> PostProduct(ProductDto productDto)
         {
@@ -74,6 +76,7 @@ namespace backendPizzaria.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
         {
@@ -92,6 +95,7 @@ namespace backendPizzaria.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {

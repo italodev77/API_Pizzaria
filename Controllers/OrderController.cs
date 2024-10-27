@@ -1,10 +1,12 @@
 ﻿using backendPizzaria.DALs.Order;
 using backendPizzaria.DTOs.Order;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backendPizzaria.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/orders")]
     public class OrderController: ControllerBase
