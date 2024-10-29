@@ -29,11 +29,6 @@ namespace backendPizzaria.DALs.Category
             await _dbContext.SaveChangesAsync();    
 
         }
-        public async Task UpdateAsync(CategoryModel category)
-        {
-            _dbContext.Category.Update(category);
-            await _dbContext.SaveChangesAsync();
-        }
         public async Task DeleteAsync(int id)
         {
             var category = await _dbContext.Category.FindAsync(id);
