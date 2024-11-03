@@ -1,5 +1,6 @@
 ﻿using backendPizzaria.Data.Persistence;
 using backendPizzaria.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.DALs.OrderItems
@@ -19,6 +20,12 @@ namespace backendPizzaria.DALs.OrderItems
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<OrderItemsModel> GetOrderItemById(int id)
+        {
+            return await _dbContext.OrderItems.FindAsync(id);
+        }
+
+
         public async Task<List<OrderItemsModel>> GetOrderDetailsAsync( int orderId)
         {
             return await _dbContext.OrderItems
@@ -26,6 +33,19 @@ namespace backendPizzaria.DALs.OrderItems
                 .Include(item => item.Product)
                 .Include(item => item.Order)
                 .ToListAsync();
+        }
+
+        public async Task DeleteOrderItem(int id)
+        {
+            var orderItem = await _dbContext.OrderItems.FindAsync(id);
+
+            if(orderItem != null)
+            {
+                _dbContext.OrderItems.Remove(orderItem);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            
         }
 
     }

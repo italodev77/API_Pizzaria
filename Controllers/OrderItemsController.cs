@@ -80,6 +80,23 @@ namespace backendPizzaria.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrderItem(int id)
+        {
+            var orderItem = await _orderItemDAL.GetOrderItemById(id);
+
+            if (orderItem == null)
+            {
+                return NotFound("Item não encontrado!");
+
+            }
+
+            _orderItemDAL.DeleteOrderItem(id);
+            return NoContent();
+
+
+        }
+
 
     }
 }
