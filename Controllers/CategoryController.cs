@@ -15,17 +15,17 @@ namespace backendPizzaria.Controllers
     [Route("/Categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryDal _categoryDal;
+        private readonly CategoryDAL _categoryDAL;
 
-        public CategoryController(CategoryDal categoryDal)
+        public CategoryController(CategoryDAL categoryDAL)
         {
-            _categoryDal = categoryDal;
+            _categoryDAL = categoryDAL;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> Get()
         {
-            var categories = await _categoryDal.GetAllAsync();
+            var categories = await _categoryDAL.GetAllAsync();
 
             var categoriesDto = categories.Select(c => new CategoryDto
             {
@@ -39,7 +39,7 @@ namespace backendPizzaria.Controllers
 
         public async Task<ActionResult<CategoryDto>> FindById(int id)
         {
-            var category = _categoryDal.GetById(id);
+            var category = _categoryDAL.GetById(id);
 
             if (category== null)
             {
@@ -60,7 +60,7 @@ namespace backendPizzaria.Controllers
                     Description = categoryDto.Description,
                 };
 
-                await _categoryDal.AddAsync(category);
+                await _categoryDAL.AddAsync(category);
                 return Ok("Categoria criada");
             } catch (Exception ex)
             {
@@ -72,13 +72,13 @@ namespace backendPizzaria.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _productDAL.GetProductById(id);
-            if (product == null)
+            var category = await _categoryDAL.GetById(id);
+            if (category == null)
             {
                 return NotFound("Produto não encontrado.");
             }
 
-            await _productDAL.DeleteProduct(id);
+            await _categoryDAL.DeleteAsync(id);
             return NoContent();
         }
 

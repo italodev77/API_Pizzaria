@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.DALs.Category
 {
-    public class CategoryDal
+    public class CategoryDAL
     {
         private readonly ApiDbContext _dbContext;
 
-        public CategoryDal(ApiDbContext dbContext)
+        public CategoryDAL(ApiDbContext dbContext)
         {
             _dbContext = dbContext;
         }

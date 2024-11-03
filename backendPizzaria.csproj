@@ -23,9 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DALs\Category\" />
-    <Folder Include="DALs\OrderItems\" />
-    <Folder Include="DTOs\OrderItems\" />
     <Folder Include="DTOs\Product\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

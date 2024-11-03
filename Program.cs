@@ -1,3 +1,6 @@
+using backendPizzaria.DALs.Category;
+using backendPizzaria.DALs.Order;
+using backendPizzaria.DALs.OrderItems;
 using backendPizzaria.DALs.Product;
 using backendPizzaria.Data.Persistence;
 using backendPizzaria.Models;
@@ -74,6 +77,9 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddScoped<ProductDAL>(); 
+builder.Services.AddScoped<OrderDAL>(); 
+builder.Services.AddScoped<CategoryDAL>();
+builder.Services.AddScoped<OrderItemDAL>();
 
 var app = builder.Build();
 

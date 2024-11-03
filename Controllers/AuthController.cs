@@ -33,13 +33,12 @@ namespace backendPizzaria.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-
-                    var user = new IdentityUser
-                    {
-                        UserName = registerUser.Email,
-                        Email = registerUser.Email,
-                        EmailConfirmed = true,
-                    };
+            var user = new IdentityUser
+            {
+                UserName = registerUser.Email,
+                Email = registerUser.Email,
+                EmailConfirmed = true,
+            };
 
             var result = await _userManager.CreateAsync(user, registerUser.Password);
 
@@ -49,11 +48,12 @@ namespace backendPizzaria.Controllers
                 return Ok(await GenerateJwt(user.Email));
             }
 
-            return Problem("Falha ao registrar o usuário");
-
-            
+            // Coletando e exibindo os erros específicos da criação do usuário
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            return Problem($"Falha ao registrar o usuário: {errors}");
         }
-        
+
+
         [HttpPost("login")]
         public async Task<ActionResult> UserLogin(LoginUserModel loginUser)
         {

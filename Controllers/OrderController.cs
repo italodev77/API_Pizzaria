@@ -1,5 +1,8 @@
 ﻿using backendPizzaria.DALs.Order;
+using backendPizzaria.DALs.Product;
 using backendPizzaria.DTOs.Order;
+using backendPizzaria.DTOs.Product;
+using backendPizzaria.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +14,9 @@ namespace backendPizzaria.Controllers
     [Route("/orders")]
     public class OrderController: ControllerBase
     {
-        private readonly OrderDal _orderDal;
+        private readonly OrderDAL _orderDal;
 
-        public OrderController(OrderDal orderDal)
+        public OrderController(OrderDAL orderDal)
         {
             _orderDal = orderDal;
         }
@@ -23,16 +26,37 @@ namespace backendPizzaria.Controllers
         public async Task<ActionResult<IEnumerable<ListAllOrdersDto>>> GetAllOrders()
         {
             var orders = await _orderDal.GetAllOrders();
-            var ordersDto = orders.Select( o => new ListAllOrdersDto
+            var ordersDto = orders.Select( table => new ListAllOrdersDto
             {
-                Name = o.Name,
-                Table = o.Table,
-                Draft = o.Draft,
-                Status = o.Status,
+                Name = table.Name,
+                Table = table.Table,
+                Draft = table.Draft,
+                Status = table.Status,
 
             }).ToList();
 
             return Ok(ordersDto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddOrder(CreateOrderDto createOrderDto)
+        {
+            try
+            {
+                var order = new OrderModel
+                {
+                    Table = createOrderDto.Table,
+                    Name = createOrderDto.Name,
+                };
+
+                await _orderDal.AddOrder(order);
+                return Ok("Pedido criado");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }

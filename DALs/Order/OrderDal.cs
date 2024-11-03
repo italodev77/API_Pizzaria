@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.DALs.Order
 {
-    public class OrderDal
+    public class OrderDAL
     {
         private readonly ApiDbContext _dbContext;
 
-        public OrderDal( ApiDbContext dbContext)
+        public OrderDAL( ApiDbContext dbContext)
         {
             _dbContext = dbContext;
         }

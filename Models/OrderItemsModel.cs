@@ -20,6 +20,7 @@ namespace backendPizzaria.Models
         public OrderModel Order { get; set; }
 
         public int ProductId { get; set; }
+        public string ProductName { get; set; } 
 
         public ProductModel Product { get; set; }
     }
