@@ -15,6 +15,6 @@ namespace backendPizzaria.Models
 
         [Compare("Password", ErrorMessage = "As senhas não conferem")]
 
-        public string ConfirmPassowrd { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

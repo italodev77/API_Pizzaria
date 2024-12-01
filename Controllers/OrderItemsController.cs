@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backendPizzaria.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class OrderItemsController : ControllerBase
     {
@@ -55,7 +55,7 @@ namespace backendPizzaria.Controllers
                 
                 if (product == null)
                 {
-                    Console.WriteLine("Produto não encontrado.");
+                    
                     return NotFound("Produto não encontrado.");
                 }
 
@@ -91,7 +91,7 @@ namespace backendPizzaria.Controllers
 
             }
 
-            _orderItemDAL.DeleteOrderItem(id);
+            await _orderItemDAL.DeleteOrderItem(id);
             return NoContent();
 
 

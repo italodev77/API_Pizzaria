@@ -11,7 +11,7 @@ namespace backendPizzaria.Controllers
 {
     [ApiController]
     [Route("/accounts")]
-    public class AuthController: ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly SignInManager<IdentityUser> _sigInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -21,7 +21,7 @@ namespace backendPizzaria.Controllers
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             IOptions<JwtSettings> jwtSettings
-            )
+        )
         {
             _sigInManager = signInManager;
             _userManager = userManager;
@@ -29,9 +29,15 @@ namespace backendPizzaria.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> UserRegister(RegisterUserModel registerUser)
+        public async Task<ActionResult> UserRegister([FromBody] RegisterUserModel registerUser)
         {
-            if (!ModelState.IsValid) return ValidationProblem(ModelState);
+            if (!ModelState.IsValid)
+            {
+                // Retorna os erros de validação de forma clara
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                               .Select(e => e.ErrorMessage);
+                return BadRequest(new { errors });
+            }
 
             var user = new IdentityUser
             {
@@ -45,32 +51,33 @@ namespace backendPizzaria.Controllers
             if (result.Succeeded)
             {
                 await _sigInManager.SignInAsync(user, false);
-                return Ok(await GenerateJwt(user.Email));
+                var token = await GenerateJwt(user.Email);
+                return Ok(new { token }); // Retorna o token no formato esperado
             }
 
-            // Coletando e exibindo os erros específicos da criação do usuário
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            return Problem($"Falha ao registrar o usuário: {errors}");
+            // Retorna os erros específicos de criação do usuário
+            var creationErrors = result.Errors.Select(e => e.Description);
+            return BadRequest(new { errors = creationErrors });
         }
-
 
         [HttpPost("login")]
         public async Task<ActionResult> UserLogin(LoginUserModel loginUser)
         {
-            if (!ModelState.IsValid) return ValidationProblem(ModelState);
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
 
             var result = await _sigInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
 
             if (result.Succeeded)
             {
-                return Ok(await GenerateJwt(loginUser.Email));
+                var token = await GenerateJwt(loginUser.Email);
+                return Ok(new { token }); // Retorna o token no formato esperado
             }
 
             return Problem("Usuário ou senha incorretos");
         }
 
-
-        private async Task<string>  GenerateJwt(string email)
+        private async Task<string> GenerateJwt(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var roles = await _userManager.GetRolesAsync(user);
@@ -85,16 +92,12 @@ namespace backendPizzaria.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
-
-
             var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
-                Subject =  new ClaimsIdentity(claims),
+                Subject = new ClaimsIdentity(claims),
                 Issuer = _jwtSettings.Sender,
                 Audience = _jwtSettings.Audience,
                 Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpirationTime),
@@ -105,6 +108,5 @@ namespace backendPizzaria.Controllers
 
             return encodedToken;
         }
-
     }
 }

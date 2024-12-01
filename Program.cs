@@ -13,14 +13,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Adicionar serviços à coleção antes de chamar Build()
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen( c =>
+builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Insira o token JWT desta forma: Bearer { Token }",
-        Name =  "Authorization",
+        Name = "Authorization",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -61,7 +62,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer( options =>
+}).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = true;
     options.SaveToken = true;
@@ -75,7 +76,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin() // Ou especifique o domínio do seu frontend
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
+// Adicionar os seus DALs aqui
 builder.Services.AddScoped<ProductDAL>(); 
 builder.Services.AddScoped<OrderDAL>(); 
 builder.Services.AddScoped<CategoryDAL>();
@@ -83,13 +94,15 @@ builder.Services.AddScoped<OrderItemDAL>();
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 

@@ -58,5 +58,23 @@ namespace backendPizzaria.Controllers
             }
 
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> FinishOrder(int id, FinishOrderDto finishOrderDto)
+        {
+            var order = await _orderDal.GetOrderById(id);
+
+            if(order == null)
+            {
+                return NotFound("Pedido não encontrado!");
+            }
+
+            order.Status = finishOrderDto.Status;
+
+            await _orderDal.AddOrder(order);
+            return NoContent();
+           
+
+        }
     }
 }
