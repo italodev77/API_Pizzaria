@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backendPizzaria.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("/Categories")]
     public class CategoryController : ControllerBase
@@ -22,13 +22,13 @@ namespace backendPizzaria.Controllers
             _categoryDAL = categoryDAL;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> Get()
         {
             var categories = await _categoryDAL.GetAllAsync();
 
             var categoriesDto = categories.Select(c => new CategoryDto
-            {
+            {   Id = c.Id,
                 Description = c.Description,
             }).ToList();
 
@@ -49,7 +49,7 @@ namespace backendPizzaria.Controllers
             return Ok(category);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
 
         public async Task<ActionResult> CreateCategory(CategoryDto categoryDto)
         {

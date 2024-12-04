@@ -52,10 +52,11 @@ namespace backendPizzaria.Controllers
             {
                 await _sigInManager.SignInAsync(user, false);
                 var token = await GenerateJwt(user.Email);
-                return Ok(new { token }); // Retorna o token no formato esperado
+
+                return Ok(new { token });
             }
 
-            // Retorna os erros específicos de criação do usuário
+            // Re
             var creationErrors = result.Errors.Select(e => e.Description);
             return BadRequest(new { errors = creationErrors });
         }
@@ -71,10 +72,20 @@ namespace backendPizzaria.Controllers
             if (result.Succeeded)
             {
                 var token = await GenerateJwt(loginUser.Email);
-                return Ok(new { token }); // Retorna o token no formato esperado
+
+                // Adiciona o token em um cookie
+                Response.Cookies.Append("session", token, new CookieOptions
+                {
+                    HttpOnly = true, // Apenas acessível pelo servidor
+                    Secure = false, // Apenas em conexões HTTPS
+                    SameSite = SameSiteMode.Strict, // Protege contra ataques CSRF
+                    Expires = DateTime.UtcNow.AddHours(1) // Define o tempo de expiração do cookie
+                });
+
+                return Ok(new { message = "Login realizado com sucesso" });
             }
 
-            return Problem("Usuário ou senha incorretos");
+            return BadRequest("Usuário ou senha incorretos");
         }
 
         private async Task<string> GenerateJwt(string email)
@@ -107,6 +118,6 @@ namespace backendPizzaria.Controllers
             var encodedToken = tokenHandler.WriteToken(token);
 
             return encodedToken;
-        }
+        }   
     }
 }
