@@ -44,5 +44,13 @@ namespace backendPizzaria.DALs.Product
                 await _dbContext.SaveChangesAsync();
             }
         }
+        public async Task<List<ProductModel>> GetProductsByCategory(string categoryId)
+        {
+            return await _dbContext.Products
+                .Where(p => p.CategoryId.ToString() == categoryId)
+                .ToListAsync();
+        }
+
+
     }
 }

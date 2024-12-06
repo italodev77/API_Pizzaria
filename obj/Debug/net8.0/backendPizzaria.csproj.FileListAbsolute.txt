@@ -147,3 +147,6 @@ C:\pizzaria\backendPizzaria\obj\Debug\net8.0\refint\backendPizzaria.dll
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.pdb
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\backendPizzaria.genruntimeconfig.cache
 C:\pizzaria\backendPizzaria\obj\Debug\net8.0\ref\backendPizzaria.dll
+C:\pizzaria\backendPizzaria\bin\Debug\net8.0\backendPizzaria.staticwebassets.endpoints.json
+C:\pizzaria\backendPizzaria\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\pizzaria\backendPizzaria\obj\Debug\net8.0\staticwebassets\msbuild.backendPizzaria.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

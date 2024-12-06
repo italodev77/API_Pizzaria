@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backendPizzaria.Controllers
 {
-    [Authorize]
+    
+
     [ApiController]
     [Route("/orders")]
     public class OrderController: ControllerBase
@@ -50,14 +51,22 @@ namespace backendPizzaria.Controllers
                 };
 
                 await _orderDal.AddOrder(order);
-                return Ok("Pedido criado");
+
+                if (order.Id == 0)
+                {
+                    return BadRequest("Falha ao gerar o ID do pedido.");
+                }
+
+                
+                return Ok(new { id = order.Id }); 
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> FinishOrder(int id, FinishOrderDto finishOrderDto)

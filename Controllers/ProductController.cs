@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backendPizzaria.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("/products")]
     public class ProductController : ControllerBase
@@ -34,6 +34,7 @@ namespace backendPizzaria.Controllers
             return Ok(productDtos);
         }
 
+
         [HttpGet("FindProduct/{id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
@@ -53,7 +54,28 @@ namespace backendPizzaria.Controllers
 
             return Ok(productDto);
         }
-        [Authorize(Roles = "Admin")]
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> SearchProducts([FromQuery] string categoryId)
+        {
+            if (string.IsNullOrWhiteSpace(categoryId))
+            {
+                return BadRequest("O parâmetro de categoria está vazio.");
+            }
+
+            var products = await _productDAL.GetProductsByCategory(categoryId);
+            var filteredProducts = products
+                .Select(p => new ProductDto
+                {
+                    Description = p.Description,
+                    Price = p.Price,
+                    Amount = p.Amount,
+                    CategoryId = (int)p.CategoryId,
+                }).ToList();
+
+            return Ok(filteredProducts);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> PostProduct(ProductDto productDto)
         {
@@ -76,7 +98,7 @@ namespace backendPizzaria.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
         {
@@ -95,7 +117,7 @@ namespace backendPizzaria.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {

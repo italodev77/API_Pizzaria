@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "OPvRQxmS6vdy6oG5u7/GWGJHB4/Fhi/jLCG+9vtbJWc=",
+  "Hash": "+pFDnz8iuHS48p/ztJyJ8woClEolln9Z1aldyKLwyMY=",
   "Source": "backendPizzaria",
   "BasePath": "_content/backendPizzaria",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }
